@@ -8,7 +8,7 @@ import numpy as np
 
 
 # load input and convert it to gray scale 
-imageA = cv.imread("no.jpg")
+imageA = cv.imread("park.jpg")
 grayA = cv.cvtColor(imageA, cv.COLOR_BGR2GRAY)
 cv.imwrite('grayimage.jpg', grayA)
 
@@ -25,7 +25,7 @@ count = 0
 
 contoursN = contours
 for  i in range(len(contours)):
-    if len(contours[i]) > 10:
+    if len(contours[i]) > 15:
         contoursN[count] = cv.approxPolyDP(contours[i],10,True)
         count = count + 1
 print("number of contours:", count)
@@ -50,6 +50,15 @@ if len(contoursN[0]) == 3:
         print("bumby road")
     elif count == 5:
         print("traffic lights ahead")
+elif len(contoursN[0]) > 6:
+    print("",len(contoursN)-2)
+    if count == 1:
+        print("No Parking")
+    if count == 3:
+        print("No Entry")
+    elif count == 2 :
+        print("Stop")
+
 
     
 cv.waitKey(0)
