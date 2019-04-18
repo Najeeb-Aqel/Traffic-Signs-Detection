@@ -8,7 +8,7 @@ import numpy as np
 
 
 # load input and convert it to gray scale 
-imageA = cv.imread("Bump.jpg")
+imageA = cv.imread("no.jpg")
 grayA = cv.cvtColor(imageA, cv.COLOR_BGR2GRAY)
 cv.imwrite('grayimage.jpg', grayA)
 
@@ -25,7 +25,7 @@ count = 0
 
 contoursN = contours
 for  i in range(len(contours)):
-    if len(contours[i]) > 50:
+    if len(contours[i]) > 10:
         contoursN[count] = cv.approxPolyDP(contours[i],10,True)
         count = count + 1
 print("number of contours:", count)
@@ -36,4 +36,20 @@ for  i in range(0,count):
        print("contour"+str(i)+" size ="+str(len(contoursN[i]))) 
         
 
+if len(contoursN[0]) == 3:
+    if count == 2:
+        point1 = contoursN[0][1][0][1]
+        point2 = contoursN[0][2][0][1]
+
+        differ = abs(point1 - point2)
+        if differ < 11:
+            print("dangerous descent")
+        else:
+            print("give way")
+    elif count == 3:
+        print("bumby road")
+    elif count == 5:
+        print("traffic lights ahead")
+
+    
 cv.waitKey(0)
