@@ -34,7 +34,8 @@ contoursN, count = findContour(thresh1)
 #printing the approximation
 for  i in range(0,count):
         print("contour"+str(i)+" size ="+str(len(contoursN[i]))) 
-        
+
+
 # Triangle Detection
 if len(contoursN[0]) == 3:
     print("The sign has a shape of a Triangle")
@@ -59,17 +60,25 @@ elif len(contoursN[0]) > 6:
         print("No Parking")
     if count == 3:
         print("No Entry")
-    elif count == 2 :
+    elif len(contoursN[count-1]) > 10 :
         print("Stop")
     elif count == 5:
         print("end speed limit")
-    elif count == 4:
-        print("right")
-    elif count == 9:
-        if len(contoursN[2]) == 2:
-            print("left")
-        elif len(contoursN[2]) == 4:
-            print("up")
+    else:
+        point1 = contoursN[count-1][0][0][0]
+        point2 = contoursN[count-1][0][0][1]
+        if point1 > point2:
+            point1 = contoursN[count-1][0][0][0]
+            point2 = contoursN[count-1][1][0][0]
+            dif = point2 - point1
+            if dif > 5:
+                print("go up")
+            else:
+                print("go right")
+        elif point1 < point2:
+            print("go left")
+            
+
 #Rectangle Detection
 elif len(contoursN[0]) == 4:
     print("The sign has a shape of a Rectangle")
@@ -105,8 +114,7 @@ elif len(contoursN[0]) == 4:
             if count1 > 0:
                 print("Major Road Sign")
             
-                
-    
+                 
 #Pentagon Detection
 elif len(contoursN[0]) == 5:
     print("The sign has a shape of a Pentagon")
