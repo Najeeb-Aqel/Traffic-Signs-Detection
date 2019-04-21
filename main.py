@@ -23,7 +23,6 @@ imageA = cv.imread("up.jpg")
 grayA = cv.cvtColor(imageA, cv.COLOR_BGR2GRAY)
 cv.imwrite('grayimage.jpg', grayA)
 
-
 #thresholding 
 ret,thresh1 = cv.threshold(grayA,200,255,cv.THRESH_BINARY_INV)
 cv.imwrite('thresh.jpg', thresh1)
@@ -34,7 +33,6 @@ contoursN, count = findContour(thresh1)
 #printing the approximation
 for  i in range(0,count):
         print("contour"+str(i)+" size ="+str(len(contoursN[i]))) 
-
 
 # Triangle Detection
 if len(contoursN[0]) == 3:
@@ -52,6 +50,7 @@ if len(contoursN[0]) == 3:
         print("bumby road")
     elif count == 5:
         print("traffic lights ahead")
+         
 #Circle Detection
 elif len(contoursN[0]) > 6:
     print("The sign has a shape of a Circle")
@@ -78,7 +77,6 @@ elif len(contoursN[0]) > 6:
         elif point1 < point2:
             print("go left")
             
-
 #Rectangle Detection
 elif len(contoursN[0]) == 4:
     print("The sign has a shape of a Rectangle")
@@ -113,8 +111,7 @@ elif len(contoursN[0]) == 4:
             contoursN1, count1 = findContour(mask)
             if count1 > 0:
                 print("Major Road Sign")
-            
-                 
+                           
 #Pentagon Detection
 elif len(contoursN[0]) == 5:
     print("The sign has a shape of a Pentagon")
@@ -131,6 +128,5 @@ elif len(contoursN[0]) == 5:
         print("Tourist Destination")
     else:
         print("Local Destination")
-
 
 cv.waitKey(0)
