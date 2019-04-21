@@ -40,7 +40,6 @@ if len(contoursN[0]) == 3:
     if count == 2:
         point1 = contoursN[0][1][0][1]
         point2 = contoursN[0][2][0][1]
-
         differ = abs(point1 - point2)
         if differ < 11:
             print("dangerous descent")
@@ -84,7 +83,6 @@ elif len(contoursN[0]) == 4:
     # define range of blue color in HSV
     lower_blue = np.array([97,50,50])
     upper_blue = np.array([130,255,255])
-
     # Threshold the HSV image to get only blue colors
     mask = cv.inRange(hsv, lower_blue, upper_blue)
     cv.imshow("blue",mask)
@@ -94,7 +92,6 @@ elif len(contoursN[0]) == 4:
     else:
         lower_yellow = np.array([22,50,50])
         upper_yellow = np.array([32,255,255])
-
         # Threshold the HSV image to get only blyellow colors
         mask = cv.inRange(hsv, lower_yellow, upper_yellow)
         cv.imshow("yellow",mask)
@@ -119,7 +116,6 @@ elif len(contoursN[0]) == 5:
     # define range of blue color in HSV
     lower_brown = np.array([0,50,50])
     upper_brown= np.array([30,255,255])
-
     # Threshold the HSV image to get only brown colors
     mask = cv.inRange(hsv, lower_brown, upper_brown)
     cv.imshow("brown",mask)
