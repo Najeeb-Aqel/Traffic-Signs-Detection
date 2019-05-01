@@ -9,9 +9,16 @@ def findContour(image):
     contours, hierarchy = cv.findContours(image, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     count = 0
     contoursN = contours
+    maxC = 0
+    #finding the maximum contour 
     for  i in range(len(contours)):
-        if len(contours[i]) > 15:
-            contoursN[count] = cv.approxPolyDP(contours[i],10,True)
+        print (cv.contourArea(contours[i]))
+        if cv.contourArea(contours[i]) > maxC:
+            maxC = cv.contourArea(contours[i])
+    print (maxC)
+    for  i in range(len(contours)):
+        if  cv.contourArea(contours[i]) > maxC*0.03:
+            contoursN[count] = cv.approxPolyDP(contours[i],15,True)
             count = count + 1
     print("number of contours:", count)
     return contoursN,count
@@ -19,7 +26,7 @@ def findContour(image):
 
 
 # load input and convert it to gray scale 
-imageA = cv.imread("circular_distorted.jpg")
+imageA = cv.imread("sign_distorted.jpg")
 grayA = cv.cvtColor(imageA, cv.COLOR_BGR2GRAY)
 cv.imwrite('grayimage.jpg', grayA)
 
@@ -36,8 +43,19 @@ for  i in range(0,count):
 
 # Triangle Detection
 if len(contoursN[0]) == 3:
+    hsv = cv.cvtColor(imageA, cv.COLOR_BGR2HSV)
     print("The sign has a shape of a Triangle.")
-    if count == 2:
+    lower_green = np.array([50,50,50])
+    upper_green = np.array([120,255,255])
+
+    # Threshold the HSV image to get only green colors
+    mask = cv.inRange(hsv, lower_green, upper_green)
+    cv.imshow("green",mask)
+    contoursN1, count1 = findContour(mask)
+    if count1 > 0:
+                print ("This has a green color.")
+                print("traffic lights ahead")
+    elif count == 2 or count == 1:
         point1 = contoursN[0][1][0][1]
         point2 = contoursN[0][2][0][1]
         differ = abs(point1 - point2)
@@ -47,27 +65,31 @@ if len(contoursN[0]) == 3:
             print("Give Way")
     elif count == 3:
         print("Bumby Road")
-    elif count == 5:
-        print("Traffic Lights Ahead.")
-         
+# elif count > 4 :
+#     if len(contoursN[count - 4]) == 3:
+#         if count == 7:
+#             print("The sign has a shape of a Triangle.")
+#             print("Traffic Lights Ahead.")     
 #Circle Detection
 elif len(contoursN[0]) > 6:
     print("The sign has a shape of a Circle or Octagon.")
     #print("",len(contoursN)-2)
     if count == 1:
         print("No Parking.")
-    elif count == 3:
-        print("No Entry.")
-    elif len(contoursN[count-1]) > 10 :
-        print("Stop.")
     elif len(contoursN[count-1]) == 9 & len(contoursN[count-2]) == 9 & len(contoursN[count-3]) == 9  :
         print("Circular.")
+    elif len(contoursN[count-1]) > 8 or count == 6:
+        print("Stop.")
+    elif count == 3:
+        print("No Entry.")
     elif count == 5:
         print("End Speed Limit.")
-    else:
+    elif count == 4:
         point1 = contoursN[count-1][0][0][0]
         point2 = contoursN[count-1][0][0][1]
-        if point1 > point2:
+        if len(contoursN[count-1]) == 4:
+            print("No Entry.") 
+        elif point1 > point2:
             point1 = contoursN[count-1][0][0][0]
             point2 = contoursN[count-1][1][0][0]
             dif = point2 - point1
@@ -113,6 +135,8 @@ elif len(contoursN[0]) == 4:
             if count1 > 0:
                 print ("This has a green color.")
                 print("Major Road Sign.")
+            else:
+                print("end of speed limit")
                            
 #Pentagon Detection
 elif len(contoursN[0]) == 5:
