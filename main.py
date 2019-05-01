@@ -13,13 +13,13 @@ def findContour(image):
         if len(contours[i]) > 15:
             contoursN[count] = cv.approxPolyDP(contours[i],10,True)
             count = count + 1
-    # print("number of contours:", count)
+    print("number of contours:", count)
     return contoursN,count
 
 
 
 # load input and convert it to gray scale 
-imageA = cv.imread("image3.jpg")
+imageA = cv.imread("circular_distorted.jpg")
 grayA = cv.cvtColor(imageA, cv.COLOR_BGR2GRAY)
 cv.imwrite('grayimage.jpg', grayA)
 
@@ -31,8 +31,8 @@ cv.imshow("threshold",thresh1)
 #Finding Contours of the sign
 contoursN, count = findContour(thresh1)
 #printing the approximation
-# for  i in range(0,count):
-#         print("contour"+str(i)+" size ="+str(len(contoursN[i]))) 
+for  i in range(0,count):
+    print("contour"+str(i)+" size ="+str(len(contoursN[i]))) 
 
 # Triangle Detection
 if len(contoursN[0]) == 3:
@@ -60,6 +60,8 @@ elif len(contoursN[0]) > 6:
         print("No Entry.")
     elif len(contoursN[count-1]) > 10 :
         print("Stop.")
+    elif len(contoursN[count-1]) == 9 & len(contoursN[count-2]) == 9 & len(contoursN[count-3]) == 9  :
+        print("Circular.")
     elif count == 5:
         print("End Speed Limit.")
     else:
